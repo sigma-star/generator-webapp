@@ -300,6 +300,14 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
+            components: {<% if (compassBootstrap) { %>
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: '<%%= yeoman.app %>/bower_components/sass-bootstrap/img/glyphicons-*.png',
+                    dest: '<%%= yeoman.app %>/images'
+                }]
+            <% } %>},
             dist: {
                 files: [{
                     expand: true,
@@ -367,6 +375,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'copy:components',
             'concurrent:server',<% if (autoprefixer) { %>
             'autoprefixer',<% } %>
             'connect:livereload',
@@ -377,6 +386,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'copy:components',
         'concurrent:test',<% if (autoprefixer) { %>
         'autoprefixer',<% } %>
         'connect:test',<% if (testFramework === 'mocha') { %>
@@ -387,6 +397,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'useminPrepare',
+        'copy:components',
         'concurrent:dist',<% if (autoprefixer) { %>
         'autoprefixer',<% } %><% if (includeRequireJS) { %>
         'requirejs',<% } %>
